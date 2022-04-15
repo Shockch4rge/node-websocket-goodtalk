@@ -1,0 +1,1 @@
+export { Message, Room, User } from "@prisma/client";

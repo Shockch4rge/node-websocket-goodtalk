@@ -1,0 +1,26 @@
+{
+	"name": "websocket-goodtalk",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "ts-node ./src/index.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"prettier-plugin-prisma": "^3.12.0",
+		"prisma": "^3.12.0",
+		"ts-node": "^10.7.0",
+		"typescript": "^4.6.3"
+	},
+	"dependencies": {
+		"@prisma/client": "^3.12.0",
+		"dotenv": "^16.0.0",
+		"express": "^4.17.3",
+		"socket.io": "^4.4.1"
+	}
+}

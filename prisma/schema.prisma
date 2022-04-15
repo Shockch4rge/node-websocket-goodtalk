@@ -1,0 +1,40 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("LOCAL_DB_URL")
+}
+
+model Message {
+    id        String   @id @default(cuid())
+    content   String
+    createdAt DateTime @default(now())
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String
+    room      Room     @relation(fields: [roomId], references: [id])
+    roomId    String
+
+    @@unique([id])
+}
+
+model User {
+    id       String    @id @default(cuid())
+    name     String
+    messages Message[]
+    rooms    Room[]
+
+    @@unique([id])
+}
+
+model Room {
+    id          String    @id @default(cuid())
+    name        String
+    description String
+    createdAt   DateTime  @default(now())
+    messages    Message[]
+    users       User[]
+
+    @@unique([id])
+}
