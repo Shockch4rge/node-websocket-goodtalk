@@ -6,11 +6,11 @@ import { Server } from "socket.io";
 import { PrismaClient } from "@prisma/client";
 
 import { ClientEvents, ServerEvents } from "./typings/events";
-import { createMockData } from "./utils/createMockData";
+import { createMockData, deleteMockData } from "./utils/mockData";
 
 
 const prisma = new PrismaClient({
-	log: ["query", "info", "error", "warn"],
+	// log: ["query", "info", "error", "warn"],
 });
 
 async function main() {
@@ -27,12 +27,15 @@ async function main() {
 	});
 
 	// TODO:
-	await createMockData(prisma);
+	// await createMockData(prisma);
+	// await deleteMockData(prisma);
 
 	const allusers = await prisma.user.findMany();
 	const allrooms = await prisma.room.findMany();
+	const allmessages = await prisma.message.findMany();
 	console.log("users", allusers);
 	console.log("rooms", allrooms);
+	console.log("messages", allmessages);
 
 	io.on("connection", socket => {
 		console.log(`${socket.id} connected`);
@@ -73,14 +76,14 @@ async function main() {
 					author: true,
 				},
 			});
-
+			
 			socket.emit("sentAllRoomMessages", messages);
 		});
 
 		// all rooms with corresponding messages in them
-		// requestClient
+		// requestClientData
 		socket.on("requestClientData", async clientId => {
-			const user = await prisma.user.findUnique({
+			const client = await prisma.user.findUnique({
 				where: {
 					id: clientId,
 				},
@@ -99,12 +102,12 @@ async function main() {
 						},
 					},
 				},
-				// false for now
+				// TODO: false for now
 				rejectOnNotFound: false,
 			});
 
-			if (user !== null) {
-				socket.emit("sentClientData", user);
+			if (client !== null) {
+				socket.emit("sentClientData", client);
 			}
 		});
 
